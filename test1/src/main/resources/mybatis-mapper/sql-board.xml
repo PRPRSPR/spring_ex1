@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- <mapper namespace="com.example.test1.mapper.UserMapper">  >> UserMapper를 바꿔줘야함-->
+<mapper namespace="com.example.test1.mapper.BoardMapper">
+
+	<select id="selectBoardList" parameterType="hashmap" resultType="com.example.test1.model.Board">
+		SELECT BOARDNO, TITLE, USERNAME, CNT, TO_CHAR(B.CDATETIME,'YYYY-MM-DD') AS CDATETIME
+		FROM BOARD B
+		INNER JOIN MEMBER M ON B.USERID=M.USERID
+	</select>
+	
+	<insert id="insertBoard" parameterType="hashmap">
+		INSERT INTO BOARD(BOARDNO,TITLE,CONTENTS,USERID,CNT,CDATETIME,UDATETIME)
+		VALUES (BOARD_SEQ.NEXTVAL, #{title}, #{contents},'user01',0,SYSDATE,SYSDATE)
+	</insert>
+	
+	<select id="selectBoard" parameterType="hashmap" resultType="com.example.test1.model.Board">
+		SELECT *
+		FROM BOARD
+		WHERE BOARDNO = #{boardNo}
+	</select>
+	
+</mapper>
+
