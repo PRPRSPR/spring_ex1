@@ -56,10 +56,42 @@ public class BoardService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
+			if(map.get("option").equals("SELECT")) {
+				boardMapper.updateCnt(map);				
+			}
+			// 조회수 증가
 			Board info = boardMapper.selectBoard(map);
 			// selectBoard >> Board 타입
 			
 			resultMap.put("info", info);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+
+	public HashMap<String, Object> editBoard(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			boardMapper.updateBoard(map);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+
+	public HashMap<String, Object> removeBoard(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			boardMapper.deleteBoard(map);
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());

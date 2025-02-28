@@ -14,13 +14,20 @@
 <body>
 	<div id="app">
 		<div>
-            제목 : {{info.TITLE}}
+            제목 : {{info.title}}
         </div>
 		<div>
-            내용 : {{info.CONTENTS}}
+            내용 : {{info.contents}}
+        </div>
+		<div>
+            조회수 : {{info.cnt}}
+        </div>
+        <div v-if="info.userId == sessionId || sessionStatus == 'A'">
+            <button @click="fnEdit()">수정</button>
+            <button @click="fnRemove()">삭제</button>
         </div>
         <div>
-            <button @click="fnEdit()">수정</button>
+            <button @click="fnBack()">되돌아가기</button>
         </div>
 	</div>
 </body>
@@ -31,14 +38,19 @@
             return {
               boardNo:"${map.boardNo}",
               // Controller에서 보낸 값 {boardNo:boardNo}
-              info:{}
+              info:{},
               // 단일객체. map으로 넘어옴 {}
+              sessionId:"${sessionId}",
+              sessionStatus:"${sessionStatus}"
             };
         },
-        methods: {
+        methods: { 
             fnGetBoard(){
 				var self = this;
-				var nparmap = {boardNo:self.boardNo};
+				// var nparmap = {boardNo:self.boardNo};
+				var nparmap = {boardNo:self.boardNo, option:"SELECT"};
+                // 수정 버튼 눌러도 조회수 증가. 파라메터 하나 더 보내 조건주기.
+                // view >> select || edit >> update
 				$.ajax({
 					url:"/board/info.dox",
 					dataType:"json",	
@@ -51,7 +63,30 @@
 				});
             },
             fnEdit:function(){
-                pageChange("/board/edit.do",{boardNo:this.boardNo})
+                pageChange("/board/edit.do",{boardNo:this.boardNo,sessionId:this.sessionId})
+            },
+            fnRemove:function(){
+                var self = this;
+				var nparmap = {boardNo:self.boardNo};
+                if(!confirm("정말 삭제하시겠습니까?")){
+                    return;
+                }
+				$.ajax({
+					url:"/board/remove.dox",
+					dataType:"json",	
+					type : "POST", 
+					data : nparmap,
+					success : function(data) { 
+						console.log(data);
+                        if(data.result == "success"){
+                            alert("삭제되었습니다");
+                            location.href="/board/list.do";
+                        }
+					}
+				});
+            },
+            fnBack:function(){
+                location.href="/board/list.do";
             }
         },
         mounted() {

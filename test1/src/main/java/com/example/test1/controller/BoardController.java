@@ -37,7 +37,7 @@ public class BoardController {
 	public String view(HttpServletRequest request,Model model, @RequestParam HashMap<String, Object> map) throws Exception{
 		// pageChange("/board/view.do",{boardNo:boardNo})에서 boardNo:boardNo 를 보냄 >> map 에 담음
 		// board-list >> Controller
-		System.out.println(map);
+//		System.out.println(map);
 		// {boardNo=1} 출력
 		
 		request.setAttribute("map", map);
@@ -78,6 +78,24 @@ public class BoardController {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = boardService.getBoard(map);
+		return new Gson().toJson(resultMap);
+	}
+	//게시글 수정
+	@RequestMapping(value = "/board/edit.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String boardEdit(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.editBoard(map);
+		return new Gson().toJson(resultMap);
+	}
+	//게시글 삭제
+	@RequestMapping(value = "/board/remove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String boardRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.removeBoard(map);
 		return new Gson().toJson(resultMap);
 	}
 }

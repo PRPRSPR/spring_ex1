@@ -14,7 +14,7 @@
 	<div id="app">
 		<div>제목 : <input v-model="info.title"></div>
 	    <div>내용 : <textarea v-model="info.contents" cols="50" rows="20"></textarea></div>
-        <div><button @click="fn()">저장</button></div>
+        <div><button @click="fnSave()">저장</button></div>
 	</div>
 </body>
 </html>
@@ -23,15 +23,13 @@
         data() {
             return {
                 boardNo:"${map.boardNo}",
-                info:{},
-                title:"",
-                contents:""
+                info:{}
             };
         },
         methods: {
             fnGetBoard(){
 				var self = this;
-				var nparmap = {boardNo:self.boardNo};
+				var nparmap = {boardNo:self.boardNo,option:"UPDATE"};
 				$.ajax({
 					url:"/board/info.dox",
 					dataType:"json",	
@@ -40,6 +38,27 @@
 					success : function(data) { 
 						console.log(data);
                         self.info = data.info;
+					}
+				});
+            },
+            fnSave:function(){
+                var self = this;
+				var nparmap = self.info;
+				// var nparmap = {
+                //     boardNo:self.boardNo,
+                //     title:self.info.title,
+                //     contents:self.info.contents
+                // };
+				$.ajax({
+					url:"/board/edit.dox",
+					dataType:"json",	
+					type : "POST", 
+					data : nparmap,
+					success : function(data) { 
+						if(data.result == "success"){
+                            alert("저장되었습니다");
+                            location.href="/board/list.do";
+                        }
 					}
 				});
             }

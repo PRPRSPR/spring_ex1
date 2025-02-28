@@ -20,9 +20,21 @@
     a{
         text-decoration: none;
     }
+    input,select{
+        margin-right: 10px;
+    }
 </style>
 <body>
 	<div id="app">
+        <div>
+            <select v-model="searchOption">
+                <option value="all">::전체::</option>
+                <option value="title">제목</option>
+                <option value="userName">작성자</option>
+            </select>
+            <input placeholder="검색어" @keyup.enter="fnBoardList" v-model="keyword">
+            <button @click="fnBoardList">검색</button>
+        </div>
 		<table>
             <tr>
                 <th>번호</th>
@@ -51,13 +63,18 @@
     const app = Vue.createApp({
         data() {
             return {
-              list : []
+              list : [],
+              keyword:"",
+              searchOption:"all"
             };
         },
         methods: {
             fnBoardList(){
 				var self = this;
-				var nparmap = {};
+				var nparmap = {
+                    keyword:self.keyword,
+                    searchOption:self.searchOption
+                };
 				$.ajax({
 					url:"/board/list.dox",
 					dataType:"json",	
