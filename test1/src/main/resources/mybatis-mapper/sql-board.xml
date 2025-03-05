@@ -6,7 +6,7 @@
 <mapper namespace="com.example.test1.mapper.BoardMapper">
 
 	<select id="selectBoardList" parameterType="hashmap" resultType="com.example.test1.model.Board">
-		SELECT BOARDNO, TITLE, USERNAME, CNT, TO_CHAR(B.CDATETIME,'YYYY-MM-DD') AS CDATETIME
+		SELECT BOARDNO, TITLE, B.USERID, USERNAME, CNT, TO_CHAR(B.CDATETIME,'YYYY-MM-DD') AS CDATETIME
 		FROM BOARD B
 		INNER JOIN MEMBER M ON B.USERID=M.USERID
 		WHERE 1=1 
@@ -19,7 +19,8 @@
 		<if test="searchOption != null and searchOption == 'userName'">
 			AND USERNAME LIKE '%' || #{keyword} || '%' 
 		</if>
-		ORDER BY BOARDNO DESC
+		ORDER BY BOARDNO DESC 
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	
 	<insert id="insertBoard" parameterType="hashmap">
@@ -53,6 +54,47 @@
 		DELETE FROM BOARD
 		WHERE BOARDNO = #{boardNo}
 	</delete>
+
+	<delete id="deleteBoardList" parameterType="hashmap">
+		DELETE 
+		FROM BOARD
+		WHERE BOARDNO IN 
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	<!-- <foreach collection="list" item="item" index="index"> >> index는 생략가능 -->
+	<!-- open="(" >> 처음 시작 시 괄호열기 close=")" >> 마지막에 괄호 닫기 separator="," << ','로 구분 -->
+	
+	<select id="selectBoardCnt" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*) FROM BOARD B
+		INNER JOIN MEMBER M ON B.USERID=M.USERID
+		WHERE 1=1 
+		<if test="searchOption != null and searchOption == 'all'">
+			AND (TITLE LIKE '%' || #{keyword} || '%' OR USERNAME LIKE '%' || #{keyword} || '%') 
+		</if>
+		<if test="searchOption != null and searchOption == 'title'">
+			AND TITLE LIKE '%' || #{keyword} || '%' 
+		</if>
+		<if test="searchOption != null and searchOption == 'userName'">
+			AND USERNAME LIKE '%' || #{keyword} || '%' 
+		</if>
+		ORDER BY BOARDNO DESC
+	</select>
+	<!-- 전체 게시글 수 구하는 쿼리문. 검색기능 사용 시 검색된 게시글 개수까지 정확히 계산하려면 list 조회와 동일한 조건 필요. -->
+	
+	<select id="selectBoardComment" parameterType="hashmap" resultType="com.example.test1.model.Comment">
+		SELECT * 
+		FROM BOARD_COMMENT BC
+		INNER JOIN MEMBER M ON BC.USERID=M.USERID
+		WHERE BC.BOARDNO = #{boardNo} 
+		ORDER BY BC.CDATETIME ASC
+	</select>
+	
+	<insert id="insertComment" parameterType="hashmap">
+		INSERT INTO BOARD_COMMENT(COMMENTNO,BOARDNO,USERID,CONTENTS,CDATETIME,UDATETIME)
+		VALUES (COMMENT_SEQ.NEXTVAL, #{boardNo}, #{sessionId}, #{comment}, SYSDATE, SYSDATE)
+	</insert>
 	
 </mapper>
 

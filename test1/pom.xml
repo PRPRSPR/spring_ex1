@@ -93,9 +93,9 @@
 			<version>23.5.0.24.07</version>
 		</dependency>
 		<dependency>
-			<groupId>net.nurigo</groupId>
-			<artifactId>sdk</artifactId>
-			<version>4.3.0</version>
+		    <groupId>net.nurigo</groupId>
+		    <artifactId>sdk</artifactId>
+		    <version>4.3.2</version>
 		</dependency>
 	</dependencies>
 

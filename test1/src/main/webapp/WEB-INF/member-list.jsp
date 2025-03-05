@@ -22,6 +22,7 @@
 		<!-- 3. 테이블 만들기 -->
 		<table>
 			<tr>
+				<th>선택</th>
 				<th>아이디</th>
 				<th>이름</th>
 				<th>주소</th>
@@ -29,6 +30,7 @@
 			</tr>
 			<tr v-for="item in list">
 				<!-- 4. 반복문으로 테이블에 데이터 채우기-->
+				<td><input type="checkbox" v-model="selectList" :value="item.userId"></td>
 				<td>{{item.userId}}</td>
 				<td>{{item.userName}}</td>
 				<td>{{item.address}}</td>
@@ -36,7 +38,7 @@
 				<!-- 5. 삭제버튼으로 함수 호출 -->
 			</tr>
 		</table>
-			
+		<button @click="fnSelectRemove">선택삭제</button>
 	</div>
 </body>
 </html>
@@ -44,8 +46,9 @@
     const app = Vue.createApp({
         data() {
             return {
-              list:[]
+              list:[],
 			  // 1. list 변수 선언
+			  selectList:[]
             };
         },
         methods: {
@@ -74,6 +77,23 @@
 				// 7. 파라메터 보내기
 				$.ajax({
 					url:"remove.dox",
+					dataType:"json",	
+					type : "POST", 
+					data : nparmap,
+					success : function(data) { 
+						console.log(data);
+						if(data.result == "success"){
+							alert("삭제되었습니다");
+							self.fnMemberList();
+						}
+					}
+				});
+			},
+			fnSelectRemove:function(){
+				var self = this;
+				var nparmap = {selectList:JSON.stringify(self.selectList)};
+				$.ajax({
+					url:"remove-list.dox",
 					dataType:"json",	
 					type : "POST", 
 					data : nparmap,

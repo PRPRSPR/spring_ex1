@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.MemberMapper;
+import com.example.test1.model.Board;
 import com.example.test1.model.Member;
 
 @Service
@@ -39,6 +40,73 @@ public class MemberService {
 			resultMap.put("result", "fail");
 		}
 			
+		return resultMap;
+	}
+
+
+	public HashMap<String, Object> memberAdd(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			memberMapper.memberInsert(map);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+
+//	중복체크
+	public HashMap<String, Object> memberIdcheck(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			Member user = memberMapper.selectMember(map);
+			
+//			resultMap.put("user", user);
+//			개인정보를 다 넘겨줄 필요 없음. 있는지 없는지만 알 수 있도록.
+			int count = user != null ? 1 : 0;
+//			조회된 user 정보가 있으면 1, 없으면 0 (편의에 맞게 보내면 됨)
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+
+//	사용자 정보 조회 (중복체크 재활용)
+	public HashMap<String, Object> getMember(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			Member member = memberMapper.selectMember(map);
+			
+			resultMap.put("member", member);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+
+
+	public HashMap<String, Object> memberRemoveList(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		// TODO Auto-generated method stub
+		try {
+			memberMapper.deleteMemberList(map);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
 		return resultMap;
 	}
 }

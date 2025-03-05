@@ -8,5 +8,23 @@
 		FROM MEMBER
 		WHERE USERID = #{userId} AND PASSWORD = #{pwd}
 	</select>
-
+	
+	<insert id="memberInsert" parameterType="hashmap">
+		INSERT INTO MEMBER(USERID,PASSWORD,USERNAME,ADDRESS,STATUS,CDATETIME)
+		VALUES(#{userId},#{pwd},#{userName},#{address},#{status},SYSDATE)
+	</insert>
+	
+	<select id="selectMember" parameterType="hashmap" resultType="com.example.test1.model.Member">
+		SELECT *
+		FROM MEMBER
+		WHERE USERID = #{userId}
+	</select>
+	
+	<delete id="deleteMemberList" parameterType="hashmap">
+		DELETE FROM MEMBER
+		WHERE USERID IN 
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
 </mapper>
