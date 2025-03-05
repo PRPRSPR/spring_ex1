@@ -69,16 +69,18 @@
             </table> -->
             <hr>
             <div id="comment" v-for="item in commentList">
-                {{item.userName}} : {{item.contents}}
+                {{item.userName}} : 
+                <span v-if="editCommentNo == item.commentNo"><input v-model="editContents"></span>
+                <span v-else>{{item.contents}}</span>
                 <label class="btn" v-if="item.userId == sessionId || sessionStatus == 'A'">
-                    <template v-if="editCommentNo == item.commentNo">
+                    <span v-if="editCommentNo == item.commentNo">
                         <button @click="fnUpdateCmt(item.commentNo)">저장</button>
                         <button @click="fnCancelCmt()">취소</button>
-                    </template>
-                    <template v-else>
+                    </span>
+                    <span v-else>
                         <button @click="fnEditCmt(item)">수정</button>
                         <button @click="fnRemoveCmt(item.commentNo)">삭제</button>
-                    </template>
+                    </span>
                 </label>
             </div>
             <hr>
@@ -109,7 +111,7 @@
                 sessionStatus:"${sessionStatus}",
                 commentList:[],
                 comment:"",
-                editCommentNo:"",
+                editCommentNo:null,
                 editContents:""
             };
         },
@@ -185,9 +187,15 @@
                 self.editCommentNo = item.commentNo;
                 self.editContents = item.comment;
             },
-            fnCancelCMT:function(){
+            fnCancelCmt:function(){
                 let self = this;
-                self.editCommentNo = "";
+                self.editCommentNo = null;
+            },
+            fnUpdateCmt:function(commentNo){
+
+            },
+            fnRemoveCmt:function(commentNo){
+
             }
         },
         mounted() {
