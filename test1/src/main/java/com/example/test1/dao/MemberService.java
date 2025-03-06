@@ -31,7 +31,11 @@ public class MemberService {
 			session.setAttribute("sessionId", member.getUserId());
 			session.setAttribute("sessionName", member.getUserName());
 			session.setAttribute("sessionStatus", member.getStatus());
+			session.setMaxInactiveInterval(60*60); //60*60초
 			// model > member 에 status, get,set 만들어줘야함
+			
+//			session.invalidate(); (한번에 모든)세션 정보 삭제 (로그아웃)
+//			session.removeAttribute("sessionId"); id, name, status 등 1개씩 삭제
 			
 			resultMap.put("member", member);
 			resultMap.put("result", "success");

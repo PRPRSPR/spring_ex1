@@ -23,9 +23,14 @@
 		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	
-	<insert id="insertBoard" parameterType="hashmap">
+	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyColumn="boardNo" keyProperty="boardNo">
 		INSERT INTO BOARD(BOARDNO,TITLE,CONTENTS,USERID,CNT,CDATETIME,UDATETIME)
 		VALUES (BOARD_SEQ.NEXTVAL, #{title}, #{contents}, #{sessionId}, 0, SYSDATE,SYSDATE)
+	</insert>
+	
+	<insert id="insertBoardFile" parameterType="hashmap">
+		INSERT INTO BOARD_FILE 
+		VALUES (FILE_SEQ.NEXTVAL, #{boardNo}, #{path}, #{filename}, #{originFilename}, #{size}, #{extensionName})
 	</insert>
 	
 	<select id="selectBoard" parameterType="hashmap" resultType="com.example.test1.model.Board">
@@ -96,5 +101,10 @@
 		VALUES (COMMENT_SEQ.NEXTVAL, #{boardNo}, #{sessionId}, #{comment}, SYSDATE, SYSDATE)
 	</insert>
 	
+	<select id="selectBoardFile" parameterType="hashmap" resultType="com.example.test1.model.BoardFile">
+		SELECT *
+		FROM BOARD_FILE
+		WHERE BOARDNO = #{boardNo}
+	</select>
 </mapper>
 

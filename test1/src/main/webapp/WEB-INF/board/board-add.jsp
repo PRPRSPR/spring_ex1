@@ -15,21 +15,33 @@
         div {
             margin-top: 20px;
         }
-        .ql-snow{
+
+        .ql-snow {
             width: 600px;
         }
-        .ql-container{
+
+        .ql-container {
             height: 400px;
+        }
+
+        .container {
+            width: 600px;
+            margin: 20px auto;
         }
     </style>
 
     <body>
-        <div id="app">
+        <div id="app" class="container">
             <div>제목 : <input v-model="title"></div>
             <!-- <div>내용 : <textarea v-model="contents" cols="50" rows="20"></textarea></div> -->
-            <div id="editor" ></div>
+            <div id="editor"></div>
             <!-- quill 사용해 내용 입력부분 변경 -->
-            <div><button @click="fnAdd()">저장</button></div>
+            <div>
+                <!-- <input type="file" id="file1" name="file1"> -->
+                <input type="file" id="file1" name="file1" accept=".jpg, .png">
+            </div>
+            <hr>
+            <div><button @click="fnAdd()">등록</button></div>
         </div>
     </body>
 
@@ -60,8 +72,32 @@
                             console.log(data);
                             if (data.result == "success") {
                                 alert("저장되었습니다");
-                                location.href = "/board/list.do";
+                                if($("#file1")[0].files.length > 0){
+                                    // 첨부파일이 있을 때
+                                    var form = new FormData();
+                                    form.append("file1", $("#file1")[0].files[0]);
+                                    form.append("boardNo", data.boardNo);
+                                    self.upload(form);
+                                } else {
+                                    location.href = "/board/list.do";
+                                }
+                                // ajax 통신은 비동기 통신 >> 파일 용량이 크면 업로드 중 다음 코드 실행해버림
+                                // upload메소드 실행 완료 시 이동하도록, 혹은 파일 업로드가 없을때 이동
+                                // location.href = "/board/list.do";
                             }
+                        }
+                    });
+                },
+                upload: function (form) {
+                    var self = this;
+                    $.ajax({
+                        url: "/fileUpload.dox"
+                        , type: "POST"
+                        , processData: false
+                        , contentType: false
+                        , data: form
+                        , success: function (response) {
+                            location.href = "/board/list.do";
                         }
                     });
                 }
@@ -77,7 +113,7 @@
                             [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                             ['link', 'image'],
                             ['clean'],
-                            [{'color':[]},{'background':[]}]
+                            [{ 'color': [] }, { 'background': [] }]
                             // 글자색, 배경색 변경 추가
                         ]
                     }

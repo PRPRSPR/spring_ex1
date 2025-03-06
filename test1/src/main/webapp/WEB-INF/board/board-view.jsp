@@ -37,6 +37,9 @@
     template{
         float: right;
     }
+    img{
+        width: 400px;
+    }
 </style>
 <body>
 	<div id="app">
@@ -47,7 +50,11 @@
                 </div>
                 <div>
                     <!-- 내용 : {{info.contents}} -->
-                    내용 : <div id="contents" v-html="info.contents"></div>
+                    내용 : 
+                    <div v-for="item in fileList">
+                        <img :src="item.filePath">
+                    </div>
+                    <div id="contents" v-html="info.contents"></div>
                 </div>
             </div>
             <div>
@@ -86,7 +93,7 @@
             <hr>
             <div>
                 <textarea v-model="comment" cols="70" rows="5"></textarea>
-                <button class="btn" @click="fnCmtSave">저장</button>
+                <button class="btn" @click="fnCmtSave">등록</button>
             </div>
             <div class="btn" v-if="info.userId == sessionId || sessionStatus == 'A'">
                 <button @click="fnEdit()">수정</button>
@@ -112,7 +119,8 @@
                 commentList:[],
                 comment:"",
                 editCommentNo:null,
-                editContents:""
+                editContents:"",
+                fileList:[]
             };
         },
         methods: { 
@@ -131,6 +139,7 @@
 						console.log(data);
                         self.info = data.info;
                         self.commentList = data.commentList;
+                        self.fileList = data.fileList;
                         self.comment="";
 					}
 				});

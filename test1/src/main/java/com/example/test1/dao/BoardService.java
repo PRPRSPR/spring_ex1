@@ -1,5 +1,6 @@
 package com.example.test1.dao;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.BoardMapper;
 import com.example.test1.model.Board;
+import com.example.test1.model.BoardFile;
 import com.example.test1.model.Comment;
 
 @Service
@@ -50,6 +52,11 @@ public class BoardService {
 		
 		try {
 			boardMapper.insertBoard(map);
+//			System.out.println("key>>"+map);
+//			System.out.println("key>>"+map.get("boardNo"));
+//			boardNo 확인 가능 >> resultMap에 담아주기
+			
+			resultMap.put("boardNo", map.get("boardNo"));
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -70,9 +77,11 @@ public class BoardService {
 			Board info = boardMapper.selectBoard(map);
 			// selectBoard >> Board 타입
 			List<Comment> commentList = boardMapper.selectBoardComment(map);
+			List<BoardFile> fileList = boardMapper.selectBoardFile(map);
 			
 			resultMap.put("info", info);
 			resultMap.put("commentList", commentList);
+			resultMap.put("fileList", fileList);
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -121,7 +130,7 @@ public class BoardService {
 		}
 		return resultMap;
 	}
-
+	// 댓글작성
 	public HashMap<String, Object> addComment(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
@@ -133,6 +142,12 @@ public class BoardService {
 			resultMap.put("result", "fail");			
 		}
 		return resultMap;
+	}
+
+	public void addBoardFile(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		boardMapper.insertBoardFile(map);
+		
 	}
 
 }
