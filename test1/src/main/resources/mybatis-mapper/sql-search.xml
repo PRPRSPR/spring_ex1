@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.SearchMapper">
+	<select id="selectSiList" parameterType="hashmap" resultType="com.example.test1.model.Search">
+		SELECT DISTINCT SI
+		FROM AREA
+	</select>
+	
+	<select id="selectGuList" parameterType="hashmap" resultType="com.example.test1.model.Search">
+		SELECT DISTINCT GU
+		FROM AREA
+		WHERE SI = #{selectSi} AND GU IS NOT NULL
+	</select>
+	
+	<select id="selectDongList" parameterType="hashmap" resultType="com.example.test1.model.Search">
+		SELECT DISTINCT DONG
+		FROM AREA
+		WHERE SI = #{selectSi}  AND GU = #{selectGu} AND DONG IS NOT NULL
+	</select>
+	
+</mapper>
+
