@@ -113,4 +113,18 @@ public class MemberService {
 		}
 		return resultMap;
 	}
+
+
+	public HashMap<String, Object> editPwd(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		// TODO Auto-generated method stub
+		try {
+			memberMapper.updatePwd(map);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
 }

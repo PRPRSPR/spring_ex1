@@ -27,4 +27,11 @@
 			#{item}
 		</foreach>
 	</delete>
+	
+	<update id="updatePwd" parameterType="hashmap">
+		UPDATE MEMBER
+		SET
+			PASSWORD = #{password}
+		WHERE USERID = #{userId}
+	</update>
 </mapper>

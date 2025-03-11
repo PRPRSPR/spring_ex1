@@ -3,6 +3,8 @@ package com.example.test1.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +38,28 @@ public class MemberController {
 	public String juso(Model model) throws Exception{
 		
 		return "/jusoPopup";
+	}
+	@RequestMapping("/pay.do") 
+	public String pay(Model model) throws Exception{
+		
+		return "/pay";
+	}
+	@RequestMapping("/auth.do") 
+	public String auth(HttpServletRequest request,Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		
+		request.setAttribute("map", map);
+		return "/auth";
+	}
+	@RequestMapping("/member/pwd.do") 
+	public String pwd(Model model) throws Exception{
+		
+		return "/member/pwd-search";
+	}
+	@RequestMapping("/member/editPwd.do") 
+	public String editpwd(HttpServletRequest request,Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		
+		request.setAttribute("map", map);
+		return "/member/pwd-edit";
 	}
 	
 	@RequestMapping(value = "/member/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -71,6 +95,15 @@ public class MemberController {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = memberService.getMember(map);
+		return new Gson().toJson(resultMap);
+	}
+	// 비밀번호 변경
+	@RequestMapping(value = "/member/editPwd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String editPwd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = memberService.editPwd(map);
 		return new Gson().toJson(resultMap);
 	}
 	// 여러 사용자 정보 삭제
