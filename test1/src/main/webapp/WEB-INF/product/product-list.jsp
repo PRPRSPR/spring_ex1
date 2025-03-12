@@ -13,7 +13,10 @@
 </head>
 <body>
     <div id="app">
-        <div class="product-list">
+        <!-- 헤더 -->
+        <jsp:include page="../common/header.jsp" />
+
+        <div class="product-list body">
             <div class="product-card" v-for="item in list">
                 <img :src="item.filePath" alt="">
                 <h3 class="product-name">{{item.itemName}}</h3>

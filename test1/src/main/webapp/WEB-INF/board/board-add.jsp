@@ -38,7 +38,8 @@
             <!-- quill 사용해 내용 입력부분 변경 -->
             <div>
                 <!-- <input type="file" id="file1" name="file1"> -->
-                <input type="file" id="file1" name="file1" accept=".jpg, .png">
+                <!-- <input type="file" id="file1" name="file1" accept=".jpg, .png"> -->
+                <input type="file" id="file1" name="file1" accept=".jpg, .png" multiple>
             </div>
             <hr>
             <div><button @click="fnAdd()">등록</button></div>
@@ -75,7 +76,10 @@
                                 if($("#file1")[0].files.length > 0){
                                     // 첨부파일이 있을 때
                                     var form = new FormData();
-                                    form.append("file1", $("#file1")[0].files[0]);
+                                    // form.append("file1", $("#file1")[0].files[0]);
+                                    for(let i=0; i<$("#file1")[0].files.length;i++){
+                                        form.append("file1", $("#file1")[0].files[i]);
+                                    }
                                     form.append("boardNo", data.boardNo);
                                     self.upload(form);
                                 } else {

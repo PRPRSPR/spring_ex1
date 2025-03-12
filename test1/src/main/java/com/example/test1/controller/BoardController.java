@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.test1.common.Common;
 import com.example.test1.dao.BoardService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -131,67 +132,98 @@ public class BoardController {
 	}
 	// 파일업로드
 	@RequestMapping("/fileUpload.dox")
-	public String result(@RequestParam("file1") MultipartFile multi, @RequestParam("boardNo") int boardNo, HttpServletRequest request,HttpServletResponse response, Model model)
+//	public String result(@RequestParam("file1") MultipartFile multi, @RequestParam("boardNo") int boardNo, HttpServletRequest request,HttpServletResponse response, Model model)
+	public String result(@RequestParam("file1") List<MultipartFile> multi, @RequestParam("boardNo") int boardNo, HttpServletRequest request,HttpServletResponse response, Model model)
 	{
 		String url = null;
 		String path="c:\\img";
 		try {
-
-			//String uploadpath = request.getServletContext().getRealPath(path);
-			String uploadpath = path;
-			String originFilename = multi.getOriginalFilename();
-			String extName = originFilename.substring(originFilename.lastIndexOf("."),originFilename.length());
-			long size = multi.getSize();
-			String saveFileName = genSaveFileName(extName);
+			// 여러개의 파일을 올리기위해 List로 바꿈. 아래 내용도 반복해줘야함 >> board-add.jsp 포함
 			
-			System.out.println("uploadpath : " + uploadpath);
-			System.out.println("originFilename : " + originFilename);
-			System.out.println("extensionName : " + extName);
-			System.out.println("size : " + size);
-			System.out.println("saveFileName : " + saveFileName);
-			String path2 = System.getProperty("user.dir");
-			System.out.println("Working Directory = " + path2 + "\\src\\webapp\\img");
-			if(!multi.isEmpty())
-			{
-				File file = new File(path2 + "\\src\\main\\webapp\\img", saveFileName);
-				multi.transferTo(file);
+//			//String uploadpath = request.getServletContext().getRealPath(path);
+//			String uploadpath = path;
+//			String originFilename = multi.getOriginalFilename();
+//			String extName = originFilename.substring(originFilename.lastIndexOf("."),originFilename.length());
+//			long size = multi.getSize();
+//			String saveFileName = genSaveFileName(extName);
+//			
+//			System.out.println("uploadpath : " + uploadpath);
+//			System.out.println("originFilename : " + originFilename);
+//			System.out.println("extensionName : " + extName);
+//			System.out.println("size : " + size);
+//			System.out.println("saveFileName : " + saveFileName);
+//			String path2 = System.getProperty("user.dir");
+//			System.out.println("Working Directory = " + path2 + "\\src\\webapp\\img");
+//			if(!multi.isEmpty())
+//			{
+//				File file = new File(path2 + "\\src\\main\\webapp\\img", saveFileName);
+//				multi.transferTo(file);
+//				
+//				//db에 보내줄 정보
+//				HashMap<String, Object> map = new HashMap<String, Object>();
+//				map.put("filename", saveFileName); // 서버 저장 파일명
+//				map.put("path", "../img/" + saveFileName); // 파일 경로
+//				map.put("boardNo", boardNo); // 게시글번호
+//				map.put("originFilename", originFilename); // 원본파일명
+//				map.put("extensionName", extName); // 확장자
+//				map.put("size", size); // 파일크기
+//				
+//				// insert 쿼리 실행
+//			    boardService.addBoardFile(map);
+//				
+//				model.addAttribute("filename", multi.getOriginalFilename());
+//				model.addAttribute("uploadPath", file.getAbsolutePath());
+//				
+//				return "redirect:board/list.do";
+//			}
+			
+//			System.out.println(multi.size());
+			// 파일 갯수
+			
+			for(MultipartFile files : multi) {
+//				System.out.println(file.getOriginalFilename());
+				String uploadpath = path;
+				String originFilename = files.getOriginalFilename();
+				String extName = originFilename.substring(originFilename.lastIndexOf("."),originFilename.length());
+				long size = files.getSize();
+				String saveFileName = Common.genSaveFileName(extName);
 				
-				//db에 보내줄 정보
-				HashMap<String, Object> map = new HashMap<String, Object>();
-				map.put("filename", saveFileName); // 서버 저장 파일명
-				map.put("path", "../img/" + saveFileName); // 파일 경로
-				map.put("boardNo", boardNo); // 게시글번호
-				map.put("originFilename", originFilename); // 원본파일명
-				map.put("extensionName", extName); // 확장자
-				map.put("size", size); // 파일크기
+				String path2 = System.getProperty("user.dir");
 				
-				// insert 쿼리 실행
-			    boardService.addBoardFile(map);
+//				System.out.println("uploadpath : " + uploadpath);
+//				System.out.println("originFilename : " + originFilename);
+//				System.out.println("extensionName : " + extName);
+//				System.out.println("size : " + size);
+//				System.out.println("saveFileName : " + saveFileName);
+//				System.out.println("Working Directory = " + path2 + "\\src\\webapp\\img");
 				
-				model.addAttribute("filename", multi.getOriginalFilename());
-				model.addAttribute("uploadPath", file.getAbsolutePath());
-				
-				return "redirect:board/list.do";
+				if(!files.isEmpty())
+				{
+					File file = new File(path2 + "\\src\\main\\webapp\\img", saveFileName);
+					files.transferTo(file);
+
+					// db에 보내줄 정보
+					HashMap<String, Object> map = new HashMap<String, Object>();
+					map.put("filename", saveFileName); // 서버 저장 파일명
+					map.put("path", "../img/" + saveFileName); // 파일 경로
+					map.put("boardNo", boardNo); // 게시글번호
+					map.put("originFilename", originFilename); // 원본파일명
+					map.put("extensionName", extName); // 확장자
+					map.put("size", size); // 파일크기
+
+					// insert 쿼리 실행
+					boardService.addBoardFile(map);
+
+//					model.addAttribute("filename", files.getOriginalFilename());
+//					model.addAttribute("uploadPath", file.getAbsolutePath());
+
+				}
 			}
+					return "redirect:board/list.do";
 		}catch(Exception e) {
 			System.out.println(e);
 		}
 		return "redirect:board/list.do";
 //		redirect >> 원하는 페이지로 이동
-	}
-	private String genSaveFileName(String extName) {
-		String fileName = "";
-		
-		Calendar calendar = Calendar.getInstance();
-		fileName += calendar.get(Calendar.YEAR);
-		fileName += calendar.get(Calendar.MONTH);
-		fileName += calendar.get(Calendar.DATE);
-		fileName += calendar.get(Calendar.HOUR);
-		fileName += calendar.get(Calendar.MINUTE);
-		fileName += calendar.get(Calendar.SECOND);
-		fileName += calendar.get(Calendar.MILLISECOND);
-		fileName += extName;
-		
-		return fileName;
 	}
 }

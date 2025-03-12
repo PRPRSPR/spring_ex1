@@ -1,0 +1,97 @@
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 20px;
+	background-color: rgb(232, 223, 255);
+	color: rgb(128, 128, 192);
+	box-shadow: 0 3px 20px #bbb;
+}
+
+.logo img {
+	height: 50px;
+}
+
+.search-bar {
+	display: flex;
+}
+
+.search-bar input {
+	padding: 5px;
+	font-size: 16px;
+	border: 1px solid #aaa;
+	border-radius: 5px;
+}
+
+.search-bar button {
+	padding: 5px 10px;
+	background-color: rgb(128, 128, 255);
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-left: 5px;
+}
+
+.search-bar button:hover {
+	background-color: rgb(111, 111, 255);
+}
+
+nav ul {
+	list-style-type: none;
+	display: flex;
+}
+
+nav ul li {
+	margin: 0 15px;
+	position: relative;
+}
+
+nav ul li a {
+	color: rgb(87, 87, 172);
+	text-decoration: none;
+	font-size: 18px;
+}
+
+nav ul li a:hover {
+	text-decoration: underline;
+}
+
+.dropdown:hover .dropdown-menu {
+	display: block;
+}
+
+.dropdown-menu {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background-color: rgb(211, 211, 233);
+	padding: 10px 0;
+	list-style-type: none;
+	border-radius: 5px;
+	min-width: 150px;
+}
+
+.dropdown-menu li a {
+	padding: 8px 15px;
+	display: block;
+	font-size: 14px;
+}
+
+.dropdown-menu li a:hover {
+	background-color: rgb(171, 171, 214);
+}
+
+.login-btn button {
+	padding: 8px 15px;
+	background-color: rgb(128, 128, 255);
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.login-btn button:hover {
+	background-color: rgb(111, 111, 255);
+}
