@@ -25,12 +25,12 @@
                     <label for="itemName">제품명:</label>
                     <input class="form-input" id="itemName" v-model="itemName" placeholder="제품명을 입력하세요">
                 </div>
-                <!-- <div>
-                    <input type="file" id="file1" name="file1" accept=".jpg, .png">
-                    멀티플 지원 X 썸네일용
-                </div> -->
                 <div>
-                    <input type="file" id="file1" name="file1" accept=".jpg, .png" multiple>
+                    썸네일 : <input type="file" id="thumbFile" name="thumbFile" accept=".jpg, .png">
+                    <!-- 멀티플 지원 X 썸네일용 -->
+                </div>
+                <div>
+                    제품 설명 : <input type="file" id="file1" name="file1" accept=".jpg, .png" multiple>
                 </div>
                 <div class="form-group">
                     <label for="price">가격:</label>
@@ -76,8 +76,9 @@
                         console.log(data);
                         // data 안에 itemNo 들어있음
                         if (data.result == "success") {
-                            if ($("#file1")[0].files.length > 0) {
+                            if ($("#file1")[0].files.length > 0 && $("#thumbFile")[0].files.length > 0) {
                                 var form = new FormData();
+                                form.append("file1", $("#thumbFile")[0].files[0]);
                                 for (let i = 0; i < $("#file1")[0].files.length; i++) {
                                     form.append("file1", $("#file1")[0].files[i]);
                                 }

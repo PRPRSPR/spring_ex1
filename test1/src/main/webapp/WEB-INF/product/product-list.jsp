@@ -12,10 +12,10 @@
     <link rel="stylesheet" href="../css/product-style.css">
 </head>
 <body>
-    <div id="app">
-        <!-- 헤더 -->
-        <jsp:include page="../common/header.jsp" />
+    <!-- 헤더 -->
+    <jsp:include page="../common/header.jsp" />
 
+    <div id="app">
         <div class="product-list body">
             <div class="product-card" v-for="item in list">
                 <img :src="item.filePath" alt="">
@@ -55,10 +55,11 @@
             };
         },
         methods: {
-            fnProductList() {
+            fnProductList(keyword) {
                 var self = this;
+                console.log(keyword);
                 var nparmap = {
-
+                    keyword:keyword
                 };
                 $.ajax({
                     url: "/product/list.dox",

@@ -21,15 +21,21 @@
         <header>
             <!-- 로고 -->
             <div class="logo">
-                <a href="/product/list.do">
-                    <img src="https://mblogthumb-phinf.pstatic.net/MjAyMjEyMTVfMTg4/MDAxNjcxMDkwNTc1ODM5.72xNKr7Hvw77FSfnoIFYYCoRneDoxXIH5jqXXA3T5v8g.5rfVNPZ9_DVsOO4sDPenHZ7L_e6kYh1SHUkzqRjjnL4g.PNG.y2kwooga/%EB%84%A4%EC%9D%B4%EB%B2%84_AI-18.png?type=w800" alt="쇼핑몰 로고">
-                </a>
+                <a href="/product/list.do">Logo</a>
             </div>
 
             <!-- 네비게이션 메뉴 -->
             <nav>
                 <ul>
-                    <li class="dropdown">
+                    <li class="dropdown" v-for="main in mainList">
+                        <a class="link" href="#">{{main.menuName}}</a>
+                        <ul class="dropdown-menu" v-if="main.subCnt > 0">
+                            <template v-for="sub in subList">
+                                <li v-if="main.menuId == sub.parentId"><a :href="sub.menuUrl">{{sub.menuName}}</a></li>
+                            </template>
+                        </ul>
+                    </li>
+                    <!-- <li class="dropdown">
                         <a class="link" href="#">PC</a>
                         <ul class="dropdown-menu">
                             <li><a href="#">키보드</a></li>
@@ -55,14 +61,14 @@
                         </ul>
                     </li>
                     <li><a class="link" href="#">기타</a></li>
-                    <li><a class="link" href="#">고객지원</a></li>
+                    <li><a class="link" href="#">고객지원</a></li> -->
                 </ul>
             </nav>
 
             <!-- 검색 바 -->
             <div class="search-bar">
-                <input type="text" placeholder="상품을 검색하세요...">
-                <button>검색</button>
+                <input type="text" placeholder="상품을 검색하세요..." v-model="keyword">
+                <button @click="fnSearch">검색</button>
             </div>
 
             <!-- 로그인 버튼 -->
@@ -76,12 +82,38 @@
         const header = Vue.createApp({
             data() {
                 return {
-                    list: []
+                    mainList: [],
+                    subList: [],
+                    keyword:""
                 };
             },
-            methods: {},
+            methods: {
+                fnMenu() {
+                    var self = this;
+                    var nparmap = {
+
+                    };
+                    $.ajax({
+                        url: "/menu.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log(data.mainList);
+                            console.log(data.subList);
+                            self.mainList = data.mainList;
+                            self.subList = data.subList;
+                        }
+                    });
+                },
+                fnSearch:function(){
+                    let self = this;
+                    app._component.methods.fnProductList(self.keyword);
+                }
+            },
             mounted() {
                 var self = this;
+                self.fnMenu();
             }
         });
         header.mount('#header');

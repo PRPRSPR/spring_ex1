@@ -20,4 +20,6 @@ public interface ProductMapper {
 
 	void insertProductFile(HashMap<String, Object> map);
 
+	void insertPayment(HashMap<String, Object> map);
+
 }

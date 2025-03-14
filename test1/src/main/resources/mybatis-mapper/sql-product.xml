@@ -7,6 +7,10 @@
 		SELECT *
 		FROM TBL_PRODUCT P
 		INNER JOIN TBL_PRODUCT_IMG I ON P.ITEM_NO = I.ITEM_NO AND I.THUMBNAIL = 'Y'
+		WHERE 1=1
+		<if test="keyword != null">
+			AND ITEM_NAME LIKE '%' || #{keyword} || '%' 
+		</if>
 	</select>
 	
 	<select id="selectProductItem" parameterType="hashmap" resultType="com.example.test1.model.Product">
@@ -29,6 +33,11 @@
 	<insert id="insertProductFile" parameterType="hashmap">
 		INSERT INTO TBL_PRODUCT_IMG
 		VALUES (#{itemNo},#{path},#{originFilename},#{thumbnail})
+	</insert>
+
+	<insert id="insertPayment" parameterType="hashmap">
+		INSERT INTO PAYMENT_HISTORY
+		VALUES (#{orderId},#{userId},#{amount},#{itemNo},SYSDATE)
 	</insert>
 	
 </mapper>

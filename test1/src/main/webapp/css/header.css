@@ -8,8 +8,11 @@ header {
 	box-shadow: 0 3px 20px #bbb;
 }
 
-.logo img {
-	height: 50px;
+.logo a{
+	font-size: 35px;
+	font-weight: bold;
+	color: rgb(128, 128, 255);
+	text-decoration: none;
 }
 
 .search-bar {
@@ -19,7 +22,7 @@ header {
 .search-bar input {
 	padding: 5px;
 	font-size: 16px;
-	border: 1px solid #aaa;
+	border: 1px solid rgb(128, 128, 192);
 	border-radius: 5px;
 }
 
@@ -54,7 +57,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-	text-decoration: underline;
+	font-weight: bold;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -66,7 +69,7 @@ nav ul li a:hover {
 	position: absolute;
 	top: 100%;
 	left: 0;
-	background-color: rgb(211, 211, 233);
+	background-color: rgb(220, 211, 233);
 	padding: 10px 0;
 	list-style-type: none;
 	border-radius: 5px;
@@ -80,7 +83,7 @@ nav ul li a:hover {
 }
 
 .dropdown-menu li a:hover {
-	background-color: rgb(171, 171, 214);
+	background-color: rgb(180, 171, 214);
 }
 
 .login-btn button {

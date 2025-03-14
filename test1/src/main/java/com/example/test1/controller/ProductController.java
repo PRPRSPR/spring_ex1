@@ -67,6 +67,14 @@ public class ProductController {
 		resultMap = productService.addProduct(map);
 		return new Gson().toJson(resultMap);
 	}
+	@RequestMapping(value = "/product/payment.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String payment(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = productService.addPayment(map);
+		return new Gson().toJson(resultMap);
+	}
 	
 	@RequestMapping("/product/fileUpload.dox")
 	public String result(@RequestParam("file1") List<MultipartFile> multi, @RequestParam("itemNo") int itemNo, HttpServletRequest request,HttpServletResponse response, Model model)
@@ -115,10 +123,10 @@ public class ProductController {
 
 				}
 			}
-					return "redirect:product/list.do";
+					return "redirect:/product/list.do";
 		}catch(Exception e) {
 			System.out.println(e);
 		}
-		return "redirect:product/list.do";
+		return "redirect:/product/list.do";
 	}
 }
