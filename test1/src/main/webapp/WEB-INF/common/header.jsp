@@ -72,8 +72,11 @@
             </div>
 
             <!-- 로그인 버튼 -->
-            <div class="login-btn">
-                <button>로그인</button>
+            <div class="login-btn" v-if="sessionId == ''">
+                <button @click="fnLogin">로그인</button>
+            </div>
+            <div class="login-btn" v-else>
+                <button @click="fnLogout">로그아웃</button>
             </div>
         </header>
     </div>
@@ -84,7 +87,8 @@
                 return {
                     mainList: [],
                     subList: [],
-                    keyword:""
+                    keyword:"",
+                    sessionId:"${sessionId}"
                 };
             },
             methods: {
@@ -109,6 +113,27 @@
                 fnSearch:function(){
                     let self = this;
                     app._component.methods.fnProductList(self.keyword);
+                },
+                fnLogin:function(){
+                    location.href = "/member/login.do";
+                },
+                fnLogout:function(){
+                    var self = this;
+                    var nparmap = {
+                    };
+                    $.ajax({
+                        url: "/member/logout.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log(data);
+                            if(data.logout == "success"){
+                                alert("로그아웃 되었습니다.");
+                                self.sessionId = "";
+                            }
+                        }
+                    });
                 }
             },
             mounted() {

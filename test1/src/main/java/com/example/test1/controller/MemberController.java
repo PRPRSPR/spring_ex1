@@ -70,6 +70,14 @@ public class MemberController {
 		resultMap = memberService.memberLogin(map);
 		return new Gson().toJson(resultMap);
 	}
+	@RequestMapping(value = "/member/logout.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String logout(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = memberService.memberLogout(map);
+		return new Gson().toJson(resultMap);
+	}
 	@RequestMapping(value = "/member/add.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String add(Model model, @RequestParam HashMap<String, Object> map) throws Exception {

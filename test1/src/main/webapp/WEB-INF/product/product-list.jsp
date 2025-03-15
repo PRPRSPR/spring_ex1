@@ -57,7 +57,7 @@
         methods: {
             fnProductList(keyword) {
                 var self = this;
-                console.log(keyword);
+                // console.log(keyword);
                 var nparmap = {
                     keyword:keyword
                 };

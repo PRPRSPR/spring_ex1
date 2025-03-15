@@ -27,20 +27,18 @@ public class MemberService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		Member member = memberMapper.getMember(map);
 		if(member != null) {
-			System.out.println("성공");
 			session.setAttribute("sessionId", member.getUserId());
 			session.setAttribute("sessionName", member.getUserName());
 			session.setAttribute("sessionStatus", member.getStatus());
 			session.setMaxInactiveInterval(60*60); //60*60초
 			// model > member 에 status, get,set 만들어줘야함
 			
-//			session.invalidate(); (한번에 모든)세션 정보 삭제 (로그아웃)
-//			session.removeAttribute("sessionId"); id, name, status 등 1개씩 삭제
+//				session.invalidate(); (한번에 모든)세션 정보 삭제 (로그아웃)
+//				session.removeAttribute("sessionId"); id, name, status 등 1개씩 삭제
 			
 			resultMap.put("member", member);
 			resultMap.put("result", "success");
 		} else {
-			System.out.println("실패");
 			resultMap.put("result", "fail");
 		}
 			
@@ -105,7 +103,7 @@ public class MemberService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		// TODO Auto-generated method stub
 		try {
-			memberMapper.deleteMemberList(map);
+			
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -125,6 +123,14 @@ public class MemberService {
 			System.out.println(e.getMessage());
 			resultMap.put("result", "fail");			
 		}
+		return resultMap;
+	}
+
+
+	public HashMap<String, Object> memberLogout(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		session.invalidate();
+		resultMap.put("logout", "success");
 		return resultMap;
 	}
 }

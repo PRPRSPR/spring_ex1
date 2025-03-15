@@ -47,7 +47,7 @@
 						console.log(data);
 						if(data.result == "success"){
 							alert(data.member.userName+"님 환영합니다");
-							location.href="/board/list.do"
+							location.href="/product/list.do"
 						}else{
 							alert("아이디/패스워드 확인하세요");							
 						}
