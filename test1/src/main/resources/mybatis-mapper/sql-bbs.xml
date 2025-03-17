@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.BbsMapper">
+
+	<select id="selectBbsList" parameterType="hashmap" resultType="com.example.test1.model.Bbs">
+		SELECT BBS_NUM, TITLE, CONTENTS, HIT, B.USER_ID, USERNAME, TO_CHAR(B.CDATETIME,'YYYY.MM.DD') AS CDATETIME, TO_CHAR(B.UDATETIME,'YYYY.MM.DD') AS UDATETIME 
+		FROM TBL_BBS B
+		INNER JOIN MEMBER M ON B.USER_ID=M.USERID
+		ORDER BY BBS_NUM DESC
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+	
+	<insert id="insertBbs" parameterType="hashmap" useGeneratedKeys="true" keyColumn="bbs_num" keyProperty="bbsNum">
+		INSERT INTO TBL_BBS
+		VALUES (BBS_SEQ.NEXTVAL, #{title}, #{contents}, 0, #{userId}, SYSDATE, SYSDATE)
+	</insert>
+	
+	<delete id="deleteBbs" parameterType="hashmap">
+		DELETE FROM TBL_BBS
+		WHERE BBS_NUM = #{bbsNum}
+	</delete>
+
+	<select id="selectInfo" parameterType="hashmap" resultType="com.example.test1.model.Bbs">
+		SELECT *
+		FROM TBL_BBS 
+		WHERE BBS_NUM = #{bbsNum}
+	</select>
+	
+	<update id="updateCnt" parameterType="hashmap">
+		UPDATE TBL_BBS
+		SET
+			HIT = HIT+1
+		WHERE BBS_NUM = #{bbsNum}
+	</update>
+
+	<update id="updateInfo" parameterType="hashmap">
+		UPDATE TBL_BBS
+		SET
+			TITLE = #{title},
+			CONTENTS = #{contents},
+			UDATETIME = SYSDATE
+		WHERE BBS_NUM = #{bbsNum}
+	</update>
+	
+	<select id="selectBbsCnt" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*)
+		FROM TBL_BBS
+		ORDER BY BBS_NUM DESC
+	</select>
+	
+	<insert id="insertBbsFile" parameterType="hashmap">
+		INSERT INTO BOARD_FILE 
+		VALUES (FILE_SEQ.NEXTVAL, #{bbsNum}, #{path}, #{filename}, #{originFilename}, #{size}, #{extensionName})
+	</insert>
+	
+	<select id="selectBbsFile" parameterType="hashmap" resultType="com.example.test1.model.BoardFile">
+		SELECT *
+		FROM BOARD_FILE
+		WHERE BOARDNO = #{bbsNum}
+	</select>
+
+</mapper>
+

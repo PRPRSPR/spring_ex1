@@ -166,7 +166,7 @@
 				location.href="/board/add.do";
             },
             fnView:function(boardNo){
-                pageChange("/board/view.do",{boardNo:boardNo})
+                pageChange("/board/view.do",{boardNo:boardNo});
             },
             fnUserInfo:function(userId){
                 var self = this;
