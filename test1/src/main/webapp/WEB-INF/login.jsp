@@ -44,7 +44,7 @@
 					data : nparmap,
 					success : function(data) { 
 						console.log(data);
-						if(){
+						if(data.resultMap == "success"){
 							alert(data.info.userName+"님 환영합니다");
 						}else{
 							alert("아이디/패스워드 확인하세요");							

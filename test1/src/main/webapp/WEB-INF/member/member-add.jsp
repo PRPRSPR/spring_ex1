@@ -84,10 +84,10 @@
             methods: {
                 fnJoin() {
                     var self = this;
-                    if(self.joinFlg == false){
-                        alert("문자 인증을 완료해주세요");
-                        return;
-                    }
+                    // if(self.joinFlg == false){
+                    //     alert("문자 인증을 완료해주세요");
+                    //     return;
+                    // }
                     var nparmap = {
                         userId: self.userId,
                         pwd: self.pwd,

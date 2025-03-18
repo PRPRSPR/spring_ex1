@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.MemberMapper;
@@ -21,27 +22,33 @@ public class MemberService {
 	@Autowired
 	HttpSession session;
 	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
 	
 	public HashMap<String, Object> memberLogin(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		Member member = memberMapper.getMember(map);
 		if(member != null) {
-			session.setAttribute("sessionId", member.getUserId());
-			session.setAttribute("sessionName", member.getUserName());
-			session.setAttribute("sessionStatus", member.getStatus());
-			session.setMaxInactiveInterval(60*60); //60*60초
-			// model > member 에 status, get,set 만들어줘야함
-			
+			String pwd = (String)map.get("pwd");
+			if(passwordEncoder.matches(pwd, member.getPassWord())) {
+				session.setAttribute("sessionId", member.getUserId());
+				session.setAttribute("sessionName", member.getUserName());
+				session.setAttribute("sessionStatus", member.getStatus());
+				session.setMaxInactiveInterval(60*60); //60*60초
+				// model > member 에 status, get,set 만들어줘야함
+				
 //				session.invalidate(); (한번에 모든)세션 정보 삭제 (로그아웃)
 //				session.removeAttribute("sessionId"); id, name, status 등 1개씩 삭제
-			
-			resultMap.put("member", member);
-			resultMap.put("result", "success");
+				
+				resultMap.put("member", member);
+				resultMap.put("result", "success");
+			}
 		} else {
 			resultMap.put("result", "fail");
 		}
-			
+		
 		return resultMap;
 	}
 
@@ -51,6 +58,10 @@ public class MemberService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
+			String hashPwd = passwordEncoder.encode((String)map.get("pwd"));
+			// passwordEncoder.matches('해시화 안 한 비밀번호','해시화 한 비밀번호'); ==>> return true or false
+			map.put("pwd", hashPwd);
+			
 			memberMapper.memberInsert(map);
 			resultMap.put("result", "success");
 		}catch(Exception e) {
@@ -117,6 +128,9 @@ public class MemberService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		// TODO Auto-generated method stub
 		try {
+			String hashPwd = passwordEncoder.encode((String)map.get("pwd"));
+			map.put("pwd", hashPwd);
+			
 			memberMapper.updatePwd(map);
 			resultMap.put("result", "success");
 		}catch(Exception e) {

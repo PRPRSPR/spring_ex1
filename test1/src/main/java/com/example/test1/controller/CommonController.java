@@ -38,6 +38,12 @@ public class CommonController {
 		return "/datepicker";
 	}
 	
+	@RequestMapping("/chatBot.do") 
+	public String add(Model model) throws Exception{
+		
+		return "/chatBot";
+	}
+	
 	@RequestMapping(value = "/menu.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String menu(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
