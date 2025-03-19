@@ -11,6 +11,7 @@
     <title>첫번째 페이지</title>
     <link rel="stylesheet" href="../css/product-style.css">
 </head>
+
 <body>
     <!-- 헤더 -->
     <jsp:include page="../common/header.jsp" />
@@ -25,23 +26,23 @@
                 <button class="buy-button" @click="fnProductView(item.itemNo)">구매하기</button>
             </div>
             <!-- <div class="product-card">
-                <img src="../img/블루투스 이어폰_커널형.png" alt="블루투스 이어폰">
-                <h3 class="product-name">블루투스 이어폰</h3>
-                <p class="product-price">₩ 30,000</p>
-                <button class="buy-button">구매하기</button>
-            </div>
-            <div class="product-card">
-                <img src="../img/게이밍 마우스.jpg" alt="게이밍 마우스">
-                <h3 class="product-name">게이밍 마우스</h3>
-                <p class="product-price">₩ 50,000</p>
-                <button class="buy-button">구매하기</button>
-            </div>
-            <div class="product-card">
-                <img src="../img/기계식 키보드.jpg" alt="기계식 키보드">
-                <h3 class="product-name">기계식 키보드</h3>
-                <p class="product-price">₩ 100,000</p>
-                <button class="buy-button">구매하기</button>
-            </div> -->
+            <img src="../img/블루투스 이어폰_커널형.png" alt="블루투스 이어폰">
+            <h3 class="product-name">블루투스 이어폰</h3>
+            <p class="product-price">₩ 30,000</p>
+            <button class="buy-button">구매하기</button>
+        </div>
+        <div class="product-card">
+            <img src="../img/게이밍 마우스.jpg" alt="게이밍 마우스">
+            <h3 class="product-name">게이밍 마우스</h3>
+            <p class="product-price">₩ 50,000</p>
+            <button class="buy-button">구매하기</button>
+        </div>
+        <div class="product-card">
+            <img src="../img/기계식 키보드.jpg" alt="기계식 키보드">
+            <h3 class="product-name">기계식 키보드</h3>
+            <p class="product-price">₩ 100,000</p>
+            <button class="buy-button">구매하기</button>
+        </div> -->
         </div>
     </div>
 </body>
@@ -51,7 +52,8 @@
     const app = Vue.createApp({
         data() {
             return {
-                list:[]
+                list: [],
+                code: ""
             };
         },
         methods: {
@@ -59,7 +61,7 @@
                 var self = this;
                 // console.log(keyword);
                 var nparmap = {
-                    keyword:keyword
+                    keyword: keyword
                 };
                 $.ajax({
                     url: "/product/list.dox",
@@ -72,12 +74,33 @@
                     }
                 });
             },
-            fnProductView:function(itemNo){
-                pageChange("/product/view.do",{itemNo:itemNo})
+            fnProductView: function (itemNo) {
+                pageChange("/product/view.do", { itemNo: itemNo })
+            },
+            fnKakao() {
+                var self = this;
+                var nparmap = {
+                    code:self.code
+                };
+                $.ajax({
+                    url: "/kakao.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: nparmap,
+                    success: function (data) {
+                        console.log(data);
+                    }
+                });
             }
         },
         mounted() {
             var self = this;
+            const queryParams = new URLSearchParams(window.location.search);
+            self.code = queryParams.get('code') || "";
+            console.log(self.code);
+            if(self.code != ""){
+                self.fnKakao();
+            }
             self.fnProductList();
         }
     });

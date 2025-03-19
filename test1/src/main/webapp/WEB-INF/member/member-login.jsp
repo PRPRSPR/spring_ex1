@@ -9,6 +9,9 @@
 	<title>첫번째 페이지</title>
 </head>
 <style>
+	.btn{
+		margin-right: 10px;
+	}
 </style>
 <body>
 	<div id="app">
@@ -18,8 +21,13 @@
 		<div>
 			비밀번호 : <input v-model="pwd">  
 		</div>
-		<button @click="fnLogin">로그인</button>
-		<button @click="fnSearchpwd">비밀번호 찾기</button>
+		<button @click="fnLogin" class="btn">로그인</button>
+		<button @click="fnSearchpwd" class="btn">비밀번호 찾기</button>
+		<div>
+			<a :href="location">
+				<img src="../img/kakao_login_medium_wide.png">
+			</a>
+		</div>
 	</div>
 </body>
 </html>
@@ -28,7 +36,8 @@
         data() {
             return {
                 userId : "",
-				pwd : ""
+				pwd : "",
+				location : "${location}"
             };
         },
         methods: {
